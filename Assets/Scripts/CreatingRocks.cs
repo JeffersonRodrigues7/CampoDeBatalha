@@ -11,19 +11,44 @@ public class CreatingRocks : MonoBehaviour
     float cooldownTime;
     GameObject warrior;
     float x, y;
-    float speedMod;//as bolinhas ficam mais rápidas com o tempo
+    float speedMod;
+    float speedModAcres;//as bolinhas ficam mais rápidas com o tempo
 
     bool launch;//Vai ser desablito no script Fase2
 
     private List<GameObject> WarriorsList;
+    private string warriorName;
+    private int difficulty;
+    private int rep;
 
     void Start()
     {
+        warriorName = GameManager.Instance.WarriorName;
+        difficulty = GameManager.Instance.Difficulty;
         WarriorsList = new List<GameObject>();
         lookDirection = new Vector2(1, 0);       
         cooldownTime = 0.0f;
         speedMod = 0.0f;
         launch = true;
+
+        if (difficulty == 1)
+        {
+            speedMod = 0.0f;
+            speedModAcres = 0.005f;
+            rep = 1;
+        }
+        if (difficulty == 2)
+        {
+            speedMod = 0.0f;
+            speedModAcres = 0.01f;
+            rep = 3;
+        }
+        if (difficulty == 3)
+        {
+            speedMod = 0.1f;
+            speedModAcres = 0.01f;
+            rep = 5;
+        }
     }
 
     private void FixedUpdate()
@@ -35,13 +60,12 @@ public class CreatingRocks : MonoBehaviour
                 foreach (GameObject warrior in GameObject.FindGameObjectsWithTag("Player"))
                     WarriorsList.Add(warrior);
 
-                if (true)//Modo dificil, aumenta as chances do jogador ser o escolhido para atacar
-                {
-                    warrior = GameObject.Find("Alistair");
-                    if(warrior != null)
-                        for (int r = 0; r < 5; r++)
-                            WarriorsList.Add(warrior);
-                }
+
+                warrior = GameObject.Find(warriorName);
+                if(warrior != null)
+                    for (int r = 0; r < rep; r++)
+                        WarriorsList.Add(warrior);
+
 
                 warrior = shuffle(WarriorsList.ToArray());//retorna um guerreiro aleatório do campo para atacar
 
@@ -109,7 +133,7 @@ public class CreatingRocks : MonoBehaviour
 
         Rigidbody2D rigidbody2d = obj.GetComponent<Rigidbody2D>();
         rigidbody2d.velocity = new Vector2(x * speedX, y * speedY);
-        speedMod += 0.005f;
+        speedMod += speedModAcres;
     }
 
     public void launchRock(bool option) { launch = option; }

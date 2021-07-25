@@ -31,6 +31,10 @@ public class WarriorFase3 : MonoBehaviour
 
     bool newWave;//Essa variável vai indicar se o Player vai poder verificar uma nova remessa de pedras que estão no cenário
 
+    private string warriorName;
+    private int difficulty;
+    private float speedMod;
+
     private void Awake()
     {
         health = 10;
@@ -38,20 +42,31 @@ public class WarriorFase3 : MonoBehaviour
 
     void Start()
     {
+        warriorName = GameManager.Instance.WarriorName;
+        difficulty = GameManager.Instance.Difficulty;
         lookDirection = new Vector2(1, 0);
         rigidbody2d = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         cooldownTime = 0.0f;
         healthText.text = gameObject.name + ": " + health;
         distaceMin = 2.5f;
+        speed = 3.0f;
         Spots = GameObject.FindGameObjectsWithTag("Spot");
 
-        if (gameObject.name == "Alistair")
-            speed = 3.0f;
-        else
-            speed = 4.0f;
-
         GameObject[] Warriors = GameObject.FindGameObjectsWithTag("Player");
+
+        if (difficulty == 1)
+        {
+            speedMod = 0.5f;
+        }
+        if (difficulty == 2)
+        {
+            speedMod = 1.0f;
+        }
+        if (difficulty == 3)
+        {
+            speedMod = 1.5f;
+        }
     }
 
     void Update()
@@ -59,7 +74,7 @@ public class WarriorFase3 : MonoBehaviour
         float px = transform.position.x;
         float py = transform.position.y;
 
-        if (gameObject.name == "Alistair") //Humano 
+        if (gameObject.name == warriorName) //Humano 
         {
             horizontal = Input.GetAxis("Horizontal");
             vertical = Input.GetAxis("Vertical");
@@ -88,7 +103,7 @@ public class WarriorFase3 : MonoBehaviour
         float px = transform.position.x;
         float py = transform.position.y;
 
-        if (gameObject.name == "Alistair") //Humano 
+        if (gameObject.name == warriorName) //Humano 
         {
             Vector2 position = rigidbody2d.position;
             position.x = position.x + speed * horizontal * Time.deltaTime;
@@ -112,10 +127,8 @@ public class WarriorFase3 : MonoBehaviour
 
             if (colliders.Length > 0)
             {
-                speed = 3.0f;
                 foreach (Collider2D collider in colliders)
                     verifyPosition(collider.gameObject);
-
             }
 
             else
@@ -189,13 +202,7 @@ public class WarriorFase3 : MonoBehaviour
         animator.SetFloat("Move Y", lookDirection.y);
         animator.SetFloat("Speed", lookDirection.magnitude);
 
-        if (lookDirection.x < 0) lookDirection.x -= 0.5f;
-        else if (lookDirection.x > 0) lookDirection.x += 0.5f;
-
-        if (lookDirection.y < 0) lookDirection.y -= 0.5f;
-        else if (lookDirection.y > 0) lookDirection.y += 0.5f;
-
-        rigidbody2d.velocity = new Vector2(lookDirection.x * speed, lookDirection.y * speed);
+        rigidbody2d.velocity = new Vector2(lookDirection.x * (speed + speedMod), lookDirection.y * (speed + speedMod));
     }
 
     public void changeHealth(int k)
@@ -216,4 +223,7 @@ public class WarriorFase3 : MonoBehaviour
     }
 
     public int getHealth() { return health; }
+
+    public void attackStart() { }
+    public void attackEnd() { }
 }

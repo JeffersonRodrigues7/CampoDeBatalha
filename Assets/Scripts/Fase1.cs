@@ -15,7 +15,7 @@ public class Fase1 : MonoBehaviour
     private bool verify = true;
     private TMP_Text loserText;
     private TMP_Text scoreText;
-    private float countdown = 10.0f;
+    private float countdown = 1.0f;
     private string loserName;
 
     void Start()
@@ -37,8 +37,6 @@ public class Fase1 : MonoBehaviour
         lostWarrior = PrefabWarriors[0];
         loserName = PrefabWarriors[0].name;
         loserText = GameObject.Find("LoserText").GetComponent<TMP_Text>();
-        
-        countdown = 10.0f;
     }
 
     void Update()

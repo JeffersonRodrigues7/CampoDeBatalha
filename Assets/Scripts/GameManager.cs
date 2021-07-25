@@ -11,6 +11,9 @@ public class GameManager : MonoBehaviour
     public List<GameObject> Warriors = new List<GameObject>();
     private Vector2[] startingPositions;
     private CinemachineVirtualCamera vcam;
+    private string warriorName;
+    private int difficulty;
+
     public static GameManager Instance
     {
         get
@@ -22,6 +25,9 @@ public class GameManager : MonoBehaviour
             return instance;
         }
     }
+
+    public int Difficulty { get => difficulty; set => difficulty = value; }
+    public string WarriorName { get => warriorName; set => warriorName = value; }
 
     private void Awake()
     {
@@ -66,7 +72,7 @@ public class GameManager : MonoBehaviour
     public void setCamera(GameObject optionB)
     {
         vcam = GameObject.Find("CM vcam1").GetComponent<CinemachineVirtualCamera>();
-        GameObject main = GameObject.Find("Alistair");
+        GameObject main = GameObject.Find(warriorName);
         if (main != null)
             vcam.Follow = main.transform;
         else

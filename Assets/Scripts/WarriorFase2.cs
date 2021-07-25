@@ -31,6 +31,10 @@ public class WarriorFase2 : MonoBehaviour
     private GameObject[] Spots;
     private GameObject spot;
 
+    private string warriorName;
+    private int difficulty;
+    private float speedMod;
+
     private void Awake()
     {
         health = 10;
@@ -38,6 +42,8 @@ public class WarriorFase2 : MonoBehaviour
 
     void Start()
     {
+        warriorName = GameManager.Instance.WarriorName;
+        difficulty = GameManager.Instance.Difficulty;
         lookDirection = new Vector2(1, 0);
         rigidbody2d = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
@@ -46,11 +52,24 @@ public class WarriorFase2 : MonoBehaviour
         cooldownTime = 0.0f;
         Spots = GameObject.FindGameObjectsWithTag("Spot");
         healthText.text = gameObject.name + ": " + health;
+
+        if (difficulty == 1)
+        {
+            speedMod = 0.25f;
+        }
+        if (difficulty == 2)
+        {
+            speedMod = 0.5f;
+        }
+        if (difficulty == 3)
+        {
+            speedMod = 0.5f;
+        }
     }
 
     void Update()
     {
-        if (gameObject.name == "Alistair") //Humano 
+        if (gameObject.name == warriorName) //Humano 
         {
             horizontal = Input.GetAxis("Horizontal");
             vertical = Input.GetAxis("Vertical");
@@ -89,7 +108,7 @@ public class WarriorFase2 : MonoBehaviour
             }
         }
 
-        if (gameObject.name == "Alistair") //Humano 
+        if (gameObject.name == warriorName) //Humano 
         {
             Vector2 position = rigidbody2d.position;
             position.x = position.x + speed * horizontal * Time.deltaTime;
@@ -115,13 +134,7 @@ public class WarriorFase2 : MonoBehaviour
                 animator.SetFloat("Move Y", lookDirection.y);
                 animator.SetFloat("Speed", lookDirection.magnitude);
 
-                if (lookDirection.x < 0) lookDirection.x -= 0.5f;
-                else lookDirection.x += 0.5f;
-
-                if (lookDirection.y < 0) lookDirection.y -= 0.5f;
-                else lookDirection.y += 0.5f;
-
-                rigidbody2d.velocity = new Vector2(lookDirection.x * speed, lookDirection.y * speed);
+                rigidbody2d.velocity = new Vector2(lookDirection.x * (speed + speedMod), lookDirection.y * (speed + speedMod));
 
                 cooldownTime = Mathf.Clamp(cooldownTime - Time.fixedDeltaTime, 0, Mathf.Infinity);
             }

@@ -20,9 +20,16 @@ public class Skeleton : MonoBehaviour
     private List<GameObject> WarriorsList;
     private GameObject warrior;
 
+    private string warriorName;
+    private int difficulty;
+    private float speedMod;
+    private int rep;
+
 
     private void Start()
     {
+        warriorName = GameManager.Instance.WarriorName;
+        difficulty = GameManager.Instance.Difficulty;
         WarriorsList = new List<GameObject>();
         lookDirection = new Vector2(1, 0);
         rigidbody2d = GetComponent<Rigidbody2D>();
@@ -31,6 +38,22 @@ public class Skeleton : MonoBehaviour
         velMod = 0.0f;
         cooldownTime = 0.0f;
         attack = true;
+
+        if (difficulty == 1)
+        {
+            speedMod = 0.0f;
+            rep = 1;
+        }
+        if (difficulty == 2)
+        {
+            speedMod = 0.5f;
+            rep = 2;
+        }
+        if (difficulty == 3)
+        {
+            speedMod = 1.0f;
+            rep = 3;
+        }
     }
 
     void FixedUpdate()
@@ -44,17 +67,14 @@ public class Skeleton : MonoBehaviour
                 foreach (GameObject warrior in GameObject.FindGameObjectsWithTag("Player"))
                     WarriorsList.Add(warrior);
 
-                if (true)//Modo dificil, aumenta as chances do jogador ser o escolhido para atacar
-                {
-                    warrior = GameObject.Find("Alistair");
-                    if(warrior != null)
-                        for (int r = 0; r < 3; r++)
-                            WarriorsList.Add(warrior);
-                }
+                warrior = GameObject.Find(warriorName);
+                if(warrior != null)
+                    for (int r = 0; r < rep; r++)
+                        WarriorsList.Add(warrior);
 
                 warrior = shuffle(WarriorsList.ToArray());//retorna um guerreiro aleatório do campo para atacar
-                if (warrior != null && warrior.name == "Alistair") //Skeleto fica mais rapido quando está seguindo o jogador 
-                    velMod = 0.1f;
+                if (warrior != null && warrior.name == warriorName) //Skeleto fica mais rapido quando está seguindo o jogador 
+                    velMod = speedMod;
                 else
                     velMod = 0.0f;
 
@@ -72,13 +92,7 @@ public class Skeleton : MonoBehaviour
         animator.SetFloat("Move Y", lookDirection.y);
         animator.SetFloat("Speed", lookDirection.magnitude);
 
-        if (lookDirection.x < 0) lookDirection.x -= velMod;
-        else lookDirection.x += velMod;
-
-        if (lookDirection.y < 0) lookDirection.y -= velMod;
-        else lookDirection.y += velMod;
-
-        rigidbody2d.velocity = new Vector2(lookDirection.x * speed, lookDirection.y * speed);
+        rigidbody2d.velocity = new Vector2(lookDirection.x * (speed + velMod), lookDirection.y * (speed + velMod));
         cooldownTime = Mathf.Clamp(cooldownTime - Time.fixedDeltaTime, 0, Mathf.Infinity);
     }
 

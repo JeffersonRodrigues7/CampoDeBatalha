@@ -27,9 +27,15 @@ public class WarriorFase1 : MonoBehaviour
     private GameObject[] Slimes;
     private GameObject slime;
     private int qtdNeigh;
+    private float speedMod;//speedMod é somente para a IA
+
+    private string warriorName;
+    private int difficulty;
 
     void Start()
     {
+        warriorName = GameManager.Instance.WarriorName;
+        difficulty = GameManager.Instance.Difficulty;
         gameObject.AddComponent<LineRenderer>();//acessa a propriedade addComponent 
         lookDirection = new Vector2(1, 0);
         rigidbody2d = GetComponent<Rigidbody2D>();
@@ -40,12 +46,27 @@ public class WarriorFase1 : MonoBehaviour
         cooldownTime = 0.0f;
         Slimes = null;
         slime = null;
-        qtdNeigh = 3;
+
+        if (difficulty == 1)
+        {
+            speedMod = 0.0f;
+            qtdNeigh = 5;
+        }
+        if (difficulty == 2)
+        {
+            speedMod = 1.0f;
+            qtdNeigh = 3;
+        }
+        if (difficulty == 3)
+        {
+            speedMod = 1.5f;
+            qtdNeigh = 3;
+        }
     }
 
     void Update()
     {
-        if (gameObject.name == "Alistair") //Humano 
+        if (gameObject.name == warriorName) //Humano 
         {
             horizontal = Input.GetAxis("Horizontal");
             vertical = Input.GetAxis("Vertical");
@@ -73,7 +94,7 @@ public class WarriorFase1 : MonoBehaviour
     void FixedUpdate()
     {
 
-        if (gameObject.name == "Alistair") //Humano 
+        if (gameObject.name == warriorName) //Humano 
         {
             Vector2 position = rigidbody2d.position;
             position.x = position.x + speed * horizontal * Time.deltaTime;
@@ -84,7 +105,6 @@ public class WarriorFase1 : MonoBehaviour
 
         else //Máquina
         {
-            float speedMod = 0.0f;
             Slimes = GameObject.FindGameObjectsWithTag("Slime");
 
             if (Slimes.Length == 0)
@@ -108,13 +128,7 @@ public class WarriorFase1 : MonoBehaviour
                 animator.SetFloat("Move Y", lookDirection.y);
                 animator.SetFloat("Speed", lookDirection.magnitude);
 
-                if (lookDirection.x < 0) lookDirection.x -= speedMod;
-                else lookDirection.x += speedMod;
-
-                if (lookDirection.y < 0) lookDirection.y -= speedMod;
-                else lookDirection.y += speedMod;
-
-                rigidbody2d.velocity = new Vector2(lookDirection.x * speed, lookDirection.y * speed);
+                rigidbody2d.velocity = new Vector2(lookDirection.x * (speed+speedMod), lookDirection.y * (speed + speedMod));
                 cooldownTime = 0.25f;
             }
 
@@ -126,7 +140,7 @@ public class WarriorFase1 : MonoBehaviour
     {
         if (other.gameObject.tag == "Slime")
         {
-            if (gameObject.name != "Alistair") animator.SetTrigger("Attack01");
+            if (gameObject.name != warriorName) animator.SetTrigger("Attack01");
 
             if (hit)
             {
