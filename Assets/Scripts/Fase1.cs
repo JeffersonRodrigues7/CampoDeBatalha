@@ -17,6 +17,7 @@ public class Fase1 : MonoBehaviour
     private TMP_Text scoreText;
     private float countdown = 1.0f;
     private string loserName;
+    private GameObject defeat;
 
     void Start()
     {
@@ -37,6 +38,11 @@ public class Fase1 : MonoBehaviour
         lostWarrior = PrefabWarriors[0];
         loserName = PrefabWarriors[0].name;
         loserText = GameObject.Find("LoserText").GetComponent<TMP_Text>();
+
+        defeat = GameObject.Find("Defeat");
+        if (GameManager.Instance.Defeat == false) 
+            defeat.SetActive(false);
+        GameManager.Instance.playBattleSong();
     }
 
     void Update()
@@ -57,6 +63,8 @@ public class Fase1 : MonoBehaviour
             verify = false;
             loserName = lostWarrior.name;
             GameManager.Instance.desactivateWarrior(lostWarrior);
+            if (loserName == GameManager.Instance.WarriorName)
+                defeat.SetActive(true);
         }
 
         if(countdown == 0)
@@ -71,4 +79,6 @@ public class Fase1 : MonoBehaviour
                 + Mathf.CeilToInt(countdown) + " segundos";
         }
     }
+
+    public void startAgain() { GameManager.Instance.startAgainManager(); }
 }

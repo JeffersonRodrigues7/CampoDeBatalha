@@ -85,6 +85,7 @@ public class WarriorFase1 : MonoBehaviour
 
             if (Input.GetKeyDown(KeyCode.C))
             {
+                GameManager.Instance.playHitSong();
                 animator.SetTrigger("Attack01");
             }
         }

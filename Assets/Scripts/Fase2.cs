@@ -17,6 +17,7 @@ public class Fase2 : MonoBehaviour
     private float countdown = 1.0f;
     private string loserName;
     bool end = false;//vai impedir que dois guerreiros sejam eliminados na rodada
+    private GameObject defeat;
 
     void Start()
     {
@@ -37,6 +38,10 @@ public class Fase2 : MonoBehaviour
         lostWarrior = PrefabWarriors[0];
         loserName = PrefabWarriors[0].name;
         loserText = GameObject.Find("LoserText").GetComponent<TMP_Text>();
+
+        defeat = GameObject.Find("Defeat");
+        if (GameManager.Instance.Defeat == false)
+            defeat.SetActive(false);
     }
 
     void Update()
@@ -56,6 +61,9 @@ public class Fase2 : MonoBehaviour
                 GameObject[] Skeletons = GameObject.FindGameObjectsWithTag("Skeleton");
                 foreach(GameObject skeleton in Skeletons)
                     skeleton.GetComponent<Skeleton>().setAttack(false);
+
+                if (loserName == GameManager.Instance.WarriorName)
+                    defeat.SetActive(true);
             }
         }
         
@@ -71,4 +79,6 @@ public class Fase2 : MonoBehaviour
                 + Mathf.CeilToInt(countdown) + " segundos";
         }
     }
+
+    public void startAgain() { GameManager.Instance.startAgainManager(); }
 }

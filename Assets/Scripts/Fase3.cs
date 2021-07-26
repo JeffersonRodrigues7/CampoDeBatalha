@@ -17,6 +17,7 @@ public class Fase3 : MonoBehaviour
     private float countdown = 10.0f;
     private string loserName;
     bool end = false;//vai impedir que dois guerreiros sejam eliminados na rodada
+    private GameObject defeat;
 
     void Start()
     {
@@ -39,6 +40,9 @@ public class Fase3 : MonoBehaviour
         loserText = GameObject.Find("LoserText").GetComponent<TMP_Text>();
 
         countdown = 10.0f;
+        defeat = GameObject.Find("Defeat");
+        if (GameManager.Instance.Defeat == false)
+            defeat.SetActive(false);
     }
 
     void Update()
@@ -57,6 +61,9 @@ public class Fase3 : MonoBehaviour
 
                 GameObject Rock = GameObject.Find("Rocks");
                 Rock.GetComponent<CreatingRocks>().launchRock(false);
+
+                if (loserName == GameManager.Instance.WarriorName)
+                    defeat.SetActive(true);
             }
         }
 
@@ -72,5 +79,7 @@ public class Fase3 : MonoBehaviour
                 + Mathf.CeilToInt(countdown) + " segundos";
         }
     }
+
+    public void startAgain() { GameManager.Instance.startAgainManager(); }
 
 }

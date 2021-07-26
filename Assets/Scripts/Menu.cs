@@ -9,17 +9,21 @@ public class Menu : MonoBehaviour
 {
     GameObject warriorChoice;
     GameObject difficultyChoice;
+    GameObject credits;
     public TMP_Text startText;
     private float countdown;
     private bool start;
+
 
     void Start()
     {
         warriorChoice = GameObject.Find("EscolherGuerreiro");
         difficultyChoice = GameObject.Find("EscolherDificuldade");
+        credits = GameObject.Find("Creditos");
         difficultyChoice.SetActive(false);
         countdown = 1.0f;
         start = false;
+        GameManager.Instance.playMenuSong();
     }
 
     void Update()
@@ -46,7 +50,8 @@ public class Menu : MonoBehaviour
     public void OnClicked(int difficulty)
     {
         GameManager.Instance.Difficulty = difficulty;
-        GameObject.Find("EscolherDificuldade").SetActive(false);
+        difficultyChoice.SetActive(false);
+        credits.SetActive(false);
         start = true;
     }
 }

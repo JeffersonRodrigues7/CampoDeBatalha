@@ -88,6 +88,7 @@ public class WarriorFase2 : MonoBehaviour
 
             if (Input.GetKeyDown(KeyCode.C))
             {
+                GameManager.Instance.playHitSong();
                 animator.SetTrigger("Attack01");
             }
         }
@@ -124,7 +125,7 @@ public class WarriorFase2 : MonoBehaviour
             {
                 skeleton = GetClosestSkeleton(Skeletons);//pega o skeleto mais próximo pra fugir dele 
                 spot = GetBetterSpot(skeleton, 4);
-                cooldownTime = 1.0f;
+                cooldownTime = 1.5f;
             }
 
             if(spot != null)

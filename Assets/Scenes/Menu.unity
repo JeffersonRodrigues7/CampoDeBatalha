@@ -1026,7 +1026,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: -70}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &348694234
@@ -1808,7 +1808,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: -70}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1146031342
@@ -1950,7 +1950,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 50}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 1120, y: 50}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &1187765507
@@ -2218,7 +2218,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 50}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 1120, y: 50}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &1253247713
@@ -2352,7 +2352,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 560, y: 200}
+  m_AnchoredPosition: {x: 560, y: 260}
   m_SizeDelta: {x: 1120, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1284353192
@@ -2375,10 +2375,14 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Cr\xE9ditos de arte:\nFoozle: https://foozlecc.itch.io/\n\n"
+  m_text: "Cr\xE9ditos de arte:\n- Foozle: https://foozlecc.itch.io/\n- Cainos: https://cainos.itch.io/pixel-art-top-down-basic\n-
+    Pipoya: https://pipoya.itch.io/pipoya-free-rpg-character-sprites-32x32\n- Unity
+    Store:  https://assetstore.unity.com/packages/templates/tutorials/2d-beginner-tutorial-resources-140167\n-
+    Craftpix: https://craftpix.net/freebies/free-elven-land-game-battle-backgrounds/\n-
+    VGcomposer: https://vgcomposer.itch.io/action-rpg-music-free\n- SFX Pro: https://mp3download.to/download/sword-fighting-ultimate-sfx-or-unity-or-unreal-engine-mp3-download.vfGWuCuSRIs\n\n\n"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 125cb55b44b24c4393181402bc6200e6, type: 2}
+  m_sharedMaterial: {fileID: 2100000, guid: d75b8f41e959450c84ac6e967084d3e1, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -2402,8 +2406,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 30
-  m_fontSizeBase: 30
+  m_fontSize: 35
+  m_fontSizeBase: 35
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -2620,6 +2624,10 @@ MonoBehaviour:
   - {fileID: 6791689884436796358, guid: 5fecc2430efeff8409023616161ddf58, type: 3}
   - {fileID: 6541185936724591371, guid: 600b4086a56793447ac2e64d1ff9f149, type: 3}
   - {fileID: 3224104724122725987, guid: f2b89e0338466c14ba5b40c8c5913fe2, type: 3}
+  defeatSound: {fileID: 8300000, guid: 6f3fba21ee297d045b709247d6974398, type: 3}
+  battleSound: {fileID: 8300000, guid: 0e919d6139178674b96835ff29bdfbe5, type: 3}
+  menuSound: {fileID: 8300000, guid: c020055c410ea6f499515f1150641e6e, type: 3}
+  hitSound: {fileID: 8300000, guid: 9efddd5f3a175ab4eaaf20d172518c83, type: 3}
 --- !u!4 &1441295242
 Transform:
   m_ObjectHideFlags: 0

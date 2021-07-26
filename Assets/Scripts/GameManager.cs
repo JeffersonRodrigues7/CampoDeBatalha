@@ -9,10 +9,18 @@ public class GameManager : MonoBehaviour
 {
     private static GameManager instance = null;
     public List<GameObject> Warriors = new List<GameObject>();
+    private List<GameObject> WarriorsTemp;
     private Vector2[] startingPositions;
     private CinemachineVirtualCamera vcam;
     private string warriorName;
     private int difficulty;
+    private bool defeat;
+
+    AudioSource defeatAS, battleAS, menuAS, hitAS;
+    public AudioClip defeatSound;
+    public AudioClip battleSound;
+    public AudioClip menuSound;
+    public AudioClip hitSound;
 
     public static GameManager Instance
     {
@@ -28,6 +36,8 @@ public class GameManager : MonoBehaviour
 
     public int Difficulty { get => difficulty; set => difficulty = value; }
     public string WarriorName { get => warriorName; set => warriorName = value; }
+
+    public bool Defeat { get => defeat; set => defeat = value; }
 
     private void Awake()
     {
@@ -47,24 +57,43 @@ public class GameManager : MonoBehaviour
             new Vector2(-0.5f, 0.5f),
             new Vector2(-1f, -0.5f)
         };
+
+        defeatAS = gameObject.AddComponent<AudioSource>();
+        menuAS = gameObject.AddComponent<AudioSource>();
+        battleAS = gameObject.AddComponent<AudioSource>();
+        hitAS = gameObject.AddComponent<AudioSource>();
+
+        defeatAS.clip = defeatSound;
+        menuAS.clip = menuSound;
+        battleAS.clip = battleSound;
+        hitAS.clip = hitSound;
     }
 
     private void Start()
     {
+        WarriorsTemp = new List<GameObject>();
+
         for (int i = 0; i < Warriors.Count; i++)
         {
-            Warriors[i].SetActive(true);
+            WarriorsTemp.Add(Warriors[i]);
+            WarriorsTemp[i].SetActive(true);
         }
+        defeat = false;
     }
 
     public void desactivateWarrior(GameObject warrior)
     {
-        for (int i = 0; i < Warriors.Count; i++)
+        for (int i = 0; i < WarriorsTemp.Count; i++)
         {
-            if (Warriors[i].name == warrior.name)
+            if (WarriorsTemp[i].name == warrior.name)
             {
-                Warriors.RemoveAt(i);
+                WarriorsTemp.RemoveAt(i);
                 Destroy(warrior);
+                if (warrior.name == warriorName)
+                {
+                    playDefeatSong();
+                    defeat = true;
+                }
             }
         }
     }
@@ -81,7 +110,7 @@ public class GameManager : MonoBehaviour
 
     public GameObject[] getWarriors()
     {
-        return Warriors.ToArray();
+        return WarriorsTemp.ToArray();
     }
 
     public Vector2[] getPositions()
@@ -89,6 +118,37 @@ public class GameManager : MonoBehaviour
         return startingPositions;
     }
 
+    public void startAgainManager()
+    {
+        battleAS.Stop();
+        Start();
+        SceneManager.LoadScene("Menu");
+    }
+
+    public void playMenuSong() {
+        menuAS.loop = true;
+        menuAS.Play();
+        menuAS.volume = 0.1f;
+    }
+
+    public void playBattleSong() {
+        menuAS.Stop();
+        battleAS.loop = true;
+        battleAS.Play();
+        battleAS.volume = 0.1f;
+    }
+
+    public void playDefeatSong() {
+        defeatAS.loop = false;
+        defeatAS.Play(); 
+    }
+
+    public void playHitSong()
+    {
+        hitAS.volume = 0.15f;
+        hitAS.loop = false;
+        hitAS.Play();
+    }
 
 
 }

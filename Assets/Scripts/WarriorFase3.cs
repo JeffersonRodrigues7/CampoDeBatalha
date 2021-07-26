@@ -93,6 +93,7 @@ public class WarriorFase3 : MonoBehaviour
 
             if (Input.GetKeyDown(KeyCode.C))
             {
+                GameManager.Instance.playHitSong();
                 animator.SetTrigger("Attack01");
             }
         }
@@ -112,14 +113,14 @@ public class WarriorFase3 : MonoBehaviour
             rigidbody2d.MovePosition(position);
         }
 
-        else if((py <= -5.0f || py >= 3.0f || px >= 4.5f || px <= -5.0) && cooldownTime == 0)
-            //Caso esteja muito próximo a uma parede ele vai voltar ao centro
-        {
+       /* else if((py <= -5.0f || py >= 3.0f || px >= 4.5f || px <= -5.0) && cooldownTime == 0)
+        {//Caso esteja muito próximo a uma parede ele vai voltar ao centro
             spot = Spots[UnityEngine.Random.Range(0, 4)];
+            Debug.Log(gameObject.name + " - " + transform.position + " -> " + spot.transform.position);
             lookDirection = (spot.transform.position - transform.position).normalized;
             movePlayer(lookDirection);
-            cooldownTime = 0.75f;
-        }
+            cooldownTime = 0.1f;
+        }*/
 
         else if(cooldownTime == 0)//Máquina
         {
@@ -170,19 +171,31 @@ public class WarriorFase3 : MonoBehaviour
             if (!rockH)//Verifica se o player vai ser acertado em x pela pedra
             {
                 move = true;
-                if (Rx - cPx >= 0)//Se ir pra esquerda for mais benéfico
-                    newX = cPx - (distaceMin - distanceInX);
+                float newXE = cPx - (distaceMin - distanceInX);
+                float newXD = cPx + (distaceMin - distanceInX);
+                if (newXD >= 4.0f)//Se ir pra esquerda for mais benéfico(Verifica se está  muito perto da parede)
+                    newX = newXE;
+                else if (newXE <= -6.0f)//Se ir pra direita for mais benéfico(Verifica se está  muito perto da parede)
+                    newX = newXD;
+                else if (Rx - cPx >= 0)//Se ir pra esquerda for mais benéfico
+                    newX = newXE;
                 else//Se ir pra direita for mais benéfico
-                    newX = cPx + (distaceMin - distanceInX);
+                    newX = newXD;
             }
-
+            
             if (rockH)//Verifica se o player vai ser acertado em y pela pedra
             {
                 move = true;
-                if (Ry - cPy >= 0)//Se ir pra baixo for mais benéfico
-                    newY = cPy - (distaceMin - distanceInY);
+                float newYB = cPy - (distaceMin - distanceInY);
+                float newYC = cPy + (distaceMin - distanceInY);
+                if (newYC >= 3.0f)//Se ir pra baixo for mais benéfico(Verifica se está  muito perto da parede)
+                    newY = newYB;
+                else if (newYB <= -5.0f)//Se ir pra cima for mais benéfico(Verifica se está  muito perto da parede)
+                    newY = newYC;
+                else if (Ry - cPy >= 0)//Se ir pra baixo for mais benéfico
+                    newY = newYB;
                 else//Se ir pra cima for mais benéfico
-                    newY = cPy + (distaceMin - distanceInY);
+                    newY = newYC;
             }
 
             if (move && cooldownTimeQ > 0)
