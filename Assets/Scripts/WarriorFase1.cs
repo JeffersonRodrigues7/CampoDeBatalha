@@ -36,7 +36,6 @@ public class WarriorFase1 : MonoBehaviour
     {
         warriorName = GameManager.Instance.WarriorName;
         difficulty = GameManager.Instance.Difficulty;
-        gameObject.AddComponent<LineRenderer>();//acessa a propriedade addComponent 
         lookDirection = new Vector2(1, 0);
         rigidbody2d = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();

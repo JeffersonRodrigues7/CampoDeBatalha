@@ -69,7 +69,7 @@ public class Fase3 : MonoBehaviour
 
         if (countdown == 0)
         {
-            //SceneManager.LoadScene("Fase 3");
+            SceneManager.LoadScene("Fase 4");
         }
 
         if (!verify)

@@ -113,15 +113,6 @@ public class WarriorFase3 : MonoBehaviour
             rigidbody2d.MovePosition(position);
         }
 
-       /* else if((py <= -5.0f || py >= 3.0f || px >= 4.5f || px <= -5.0) && cooldownTime == 0)
-        {//Caso esteja muito próximo a uma parede ele vai voltar ao centro
-            spot = Spots[UnityEngine.Random.Range(0, 4)];
-            Debug.Log(gameObject.name + " - " + transform.position + " -> " + spot.transform.position);
-            lookDirection = (spot.transform.position - transform.position).normalized;
-            movePlayer(lookDirection);
-            cooldownTime = 0.1f;
-        }*/
-
         else if(cooldownTime == 0)//Máquina
         {
             Collider2D[] colliders = Physics2D.OverlapCircleAll(gameObject.transform.position, 1.5f, LayerMask.GetMask("Rock"));
