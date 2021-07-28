@@ -11,6 +11,7 @@ public class CreatingSkeletons : MonoBehaviour
     private GameObject[] Skeletons;
     private GameObject[] Warriors;
     private int numSkeletonsW;//Número máximo de esqueletos brancos permitidos no campo
+    private int skeletonsW;
     private float countdownSW;
     private float countdownSR;
     private float countdownSC;
@@ -31,9 +32,13 @@ public class CreatingSkeletons : MonoBehaviour
     {
         if (createSkeleton)
         {
+            skeletonsW = 0;
             Skeletons = GameObject.FindGameObjectsWithTag("Skeleton");
+            foreach (GameObject s in Skeletons)
+                if (s.name == "SkeletonW")
+                    skeletonsW++;
 
-            if (Skeletons.Length < numSkeletonsW && countdownSW == 0)
+            if (skeletonsW < numSkeletonsW && countdownSW == 0)
             {
                 instanceSkeleton(skeletonW);
             }

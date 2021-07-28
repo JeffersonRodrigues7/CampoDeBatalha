@@ -16,8 +16,9 @@ public class GameManager : MonoBehaviour
     private int difficulty;
     private bool defeat;
 
-    AudioSource defeatAS, battleAS, menuAS, hitAS;
+    AudioSource defeatAS, battleAS, menuAS, hitAS, winAS;
     public AudioClip defeatSound;
+    public AudioClip winSound;
     public AudioClip battleSound;
     public AudioClip menuSound;
     public AudioClip hitSound;
@@ -62,11 +63,13 @@ public class GameManager : MonoBehaviour
         menuAS = gameObject.AddComponent<AudioSource>();
         battleAS = gameObject.AddComponent<AudioSource>();
         hitAS = gameObject.AddComponent<AudioSource>();
+        winAS = gameObject.AddComponent<AudioSource>();
 
         defeatAS.clip = defeatSound;
         menuAS.clip = menuSound;
         battleAS.clip = battleSound;
         hitAS.clip = hitSound;
+        winAS.clip = winSound;
     }
 
     private void Start()
@@ -142,6 +145,12 @@ public class GameManager : MonoBehaviour
     public void playDefeatSong() {
         defeatAS.loop = false;
         defeatAS.Play(); 
+    }
+
+    public void playWinSong()
+    {
+        winAS.loop = false;
+        winAS.Play();
     }
 
     public void playHitSong()

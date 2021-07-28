@@ -10,6 +10,7 @@ public class Fase4 : MonoBehaviour
     private List<GameObject> PrefabWarriors = new List<GameObject>();
     private GameObject tempWarrior;
     private GameObject lostWarrior;
+    private GameObject winner;
     private Vector2[] startingPositions;
     private bool verify = true;
     private TMP_Text loserText;
@@ -38,6 +39,7 @@ public class Fase4 : MonoBehaviour
 
         GameManager.Instance.setCamera(PrefabWarriors[0]);
         lostWarrior = PrefabWarriors[0];
+        winner = PrefabWarriors[1];
         loserName = PrefabWarriors[0].name;
         loserText = GameObject.Find("LoserText").GetComponent<TMP_Text>();
 
@@ -58,6 +60,7 @@ public class Fase4 : MonoBehaviour
             {
                 if (lostWarrior.GetComponent<WarriorFase4>().getScore() > warrior.GetComponent<WarriorFase4>().getScore())
                 {
+                    winner = lostWarrior;
                     lostWarrior = warrior;
                 }
             }
@@ -70,6 +73,9 @@ public class Fase4 : MonoBehaviour
 
             if (loserName == GameManager.Instance.WarriorName)
                 defeat.SetActive(true);
+
+            if(winner.name == GameManager.Instance.WarriorName) { GameManager.Instance.playWinSong(); }
+
         }
 
         if (countdown == 0)

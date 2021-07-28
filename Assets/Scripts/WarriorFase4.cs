@@ -44,7 +44,6 @@ public class WarriorFase4 : MonoBehaviour
         score = 0;
         rigidbody2d = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
-        warriorName = "Alistair";
         speed = 3.0f;
         speedMod = 0.0f;
         countdownRival = 0.0f;

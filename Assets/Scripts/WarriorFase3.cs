@@ -24,6 +24,7 @@ public class WarriorFase3 : MonoBehaviour
 
     private GameObject[] Rocks;
     private GameObject Rock;
+    private float radius;
     float distaceMin;
 
     private GameObject[] Spots;
@@ -49,7 +50,7 @@ public class WarriorFase3 : MonoBehaviour
         animator = GetComponent<Animator>();
         cooldownTime = 0.0f;
         healthText.text = gameObject.name + ": " + health;
-        distaceMin = 2.5f;
+        distaceMin = 2.5f;//distancia minima para se mover
         speed = 3.0f;
         Spots = GameObject.FindGameObjectsWithTag("Spot");
 
@@ -57,15 +58,18 @@ public class WarriorFase3 : MonoBehaviour
 
         if (difficulty == 1)
         {
-            speedMod = 0.5f;
+            speedMod = 0.0f;
+            radius = 1.0f;
         }
         if (difficulty == 2)
         {
-            speedMod = 1.0f;
+            speedMod = 0.75f;
+            radius = 1.25f;
         }
         if (difficulty == 3)
         {
             speedMod = 1.5f;
+            radius = 1.5f;
         }
     }
 
@@ -115,7 +119,7 @@ public class WarriorFase3 : MonoBehaviour
 
         else if(cooldownTime == 0)//Máquina
         {
-            Collider2D[] colliders = Physics2D.OverlapCircleAll(gameObject.transform.position, 1.5f, LayerMask.GetMask("Rock"));
+            Collider2D[] colliders = Physics2D.OverlapCircleAll(gameObject.transform.position, radius, LayerMask.GetMask("Rock"));
 
             if (colliders.Length > 0)
             {

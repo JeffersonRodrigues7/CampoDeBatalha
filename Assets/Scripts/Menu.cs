@@ -54,4 +54,6 @@ public class Menu : MonoBehaviour
         credits.SetActive(false);
         start = true;
     }
+
+    public void openCredits() { SceneManager.LoadScene("Creditos"); }
 }

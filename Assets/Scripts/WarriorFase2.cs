@@ -22,14 +22,9 @@ public class WarriorFase2 : MonoBehaviour
     float invincibleTimer;
     Color startColor;
 
-    float lookDistance;//contém a distância do primeiro objeto que foi interceptado pelo raio
-
     private GameObject[] Skeletons;
     private GameObject skeleton;
     float cooldownTime;
-
-    private GameObject[] Spots;
-    private GameObject spot;
 
     private string warriorName;
     private int difficulty;
@@ -50,7 +45,6 @@ public class WarriorFase2 : MonoBehaviour
         speed = 3.0f;
         startColor = GetComponent<SpriteRenderer>().color;
         cooldownTime = 0.0f;
-        Spots = GameObject.FindGameObjectsWithTag("Spot");
         healthText.text = gameObject.name + ": " + health;
 
         if (difficulty == 1)
@@ -124,22 +118,53 @@ public class WarriorFase2 : MonoBehaviour
             if (cooldownTime == 0)
             {
                 skeleton = GetClosestSkeleton(Skeletons);//pega o skeleto mais próximo pra fugir dele 
-                spot = GetBetterSpot(skeleton, 4);
-                cooldownTime = 1.5f;
+                runAway(skeleton);
+                cooldownTime = 1.25f;
             }
+            
+        }
+        cooldownTime = Mathf.Clamp(cooldownTime - Time.fixedDeltaTime, 0, Mathf.Infinity);
+    }
 
-            if(spot != null)
+    private void runAway(GameObject skeleton)
+    {
+        float newX = transform.position.x;
+        float newY = transform.position.y;
+
+        float distX = Mathf.Abs(skeleton.transform.position.x - newX);
+        float distY = Mathf.Abs(skeleton.transform.position.y - newY);
+
+        if (distX <= distY)
+        {
+            if (skeleton.transform.position.x >= -1.0f)
             {
-                lookDirection = (spot.transform.position - transform.position).normalized;
-                animator.SetFloat("Move X", lookDirection.x);
-                animator.SetFloat("Move Y", lookDirection.y);
-                animator.SetFloat("Speed", lookDirection.magnitude);
-
-                rigidbody2d.velocity = new Vector2(lookDirection.x * (speed + speedMod), lookDirection.y * (speed + speedMod));
-
-                cooldownTime = Mathf.Clamp(cooldownTime - Time.fixedDeltaTime, 0, Mathf.Infinity);
+                newX = -7f;
+            }
+            else
+            {
+                newX = 5.00f;
             }
         }
+        else
+        {
+            if (skeleton.transform.position.y >= -1.0f)
+            {
+                newY = -5.5f;
+            }
+            else
+            {
+                newY = 4f;
+            }
+        }
+
+        Vector3 newP = new Vector3(newX, newY);
+        lookDirection = (newP - transform.position).normalized;
+        animator.SetFloat("Move X", lookDirection.x);
+        animator.SetFloat("Move Y", lookDirection.y);
+        animator.SetFloat("Speed", lookDirection.magnitude);
+
+        rigidbody2d.velocity = new Vector2(lookDirection.x * (speed + speedMod), lookDirection.y * (speed + speedMod));
+
     }
 
     GameObject GetClosestSkeleton(GameObject[] skeletons)
@@ -160,49 +185,6 @@ public class WarriorFase2 : MonoBehaviour
         }
 
         return closestSkeleton;
-    }
-
-    GameObject GetBetterSpot(GameObject skeleton, int k)//Retorna um ponto aleatório entre os k mais distance do skeleto mais proximo
-    {
-        GameObject actualSpot;
-        GameObject tempSpot;
-        List<GameObject> furtherSpots = new List<GameObject>();
-        Vector3 currentPosition = skeleton.transform.position;//Posição atual do skeleto
-
-        for (int i = 0; i < Spots.Length; i++)
-        {
-            actualSpot = Spots[i];
-            Vector3 directionToSpot = actualSpot.transform.position - currentPosition;
-            float distanceToSpot = directionToSpot.sqrMagnitude;//Distãncia do Skeleto atual para o ponto
-
-            if (furtherSpots == null || furtherSpots.Count < k)
-            {
-                furtherSpots.Add(actualSpot);
-            }
-            else
-            {
-                for (int j = 0; j < k; j++)
-                {
-                    Vector3 directionToClosestSlime = furtherSpots[j].transform.position - currentPosition;
-                    float distanceToClosestSpot = directionToClosestSlime.sqrMagnitude;//Distancia do ponto mais proximo para o esqueleto
-
-                    if (distanceToSpot > distanceToClosestSpot)//verifica se o ponto atual está mais próximo que o ponto que já estava no vetor
-                    {
-                        tempSpot = furtherSpots[j];
-                        furtherSpots[j] = actualSpot;
-
-                        //Abaixo faço a troca e verifico se o ponto que perdeu seu lugar está mais próximo do esqueleto do que os outros que tbm estavam no vetor
-                        actualSpot = tempSpot;
-                        directionToSpot = actualSpot.transform.position - currentPosition;
-                        distanceToSpot = directionToSpot.sqrMagnitude;
-                    }
-                }
-            }
-
-        }
-
-        int position = Random.Range(0, k);
-        return furtherSpots.ToArray()[position];//retorna posição aleatória dentro do vetor 
     }
 
     public void changeHealth(int k)
