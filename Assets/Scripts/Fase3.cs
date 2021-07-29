@@ -6,6 +6,8 @@ using UnityEngine.SceneManagement;
 
 public class Fase3 : MonoBehaviour
 {
+    public GameObject tutorial;
+    GameObject Rock;
     private GameObject[] Warriors;
     private List<GameObject> PrefabWarriors = new List<GameObject>();
     private GameObject tempWarrior;
@@ -21,6 +23,7 @@ public class Fase3 : MonoBehaviour
 
     void Start()
     {
+        Rock = GameObject.Find("Rocks");
         startingPositions = GameManager.Instance.getPositions();
         Warriors = GameManager.Instance.getWarriors();
 
@@ -47,7 +50,17 @@ public class Fase3 : MonoBehaviour
 
     void Update()
     {
-        
+        if ((GameManager.Instance.Defeat || Input.GetKeyDown(KeyCode.C)) && verify)
+        {
+            tutorial.SetActive(false);
+
+            foreach (GameObject warrior in PrefabWarriors)
+                if (warrior != null)
+                    warrior.GetComponent<WarriorFase3>().StartGame = true;
+
+            Rock.GetComponent<CreatingRocks>().launchRock(true);
+        }
+
         foreach (GameObject warrior in PrefabWarriors)
         {
             if (warrior != null && warrior.GetComponent<WarriorFase3>().getHealth() <= 0 && !end)
@@ -59,7 +72,6 @@ public class Fase3 : MonoBehaviour
                 GameManager.Instance.desactivateWarrior(lostWarrior);
                 verify = false;
 
-                GameObject Rock = GameObject.Find("Rocks");
                 Rock.GetComponent<CreatingRocks>().launchRock(false);
 
                 if (loserName == GameManager.Instance.WarriorName)

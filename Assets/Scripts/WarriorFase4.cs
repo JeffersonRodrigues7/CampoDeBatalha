@@ -32,6 +32,10 @@ public class WarriorFase4 : MonoBehaviour
     private GameObject[] SkeletonsRed;//Vai ser usada para dificuldade mais dificeis, aqui o guerreiro rival sempre irá caçar o vermelho primeiro
     private GameObject skeleton;
 
+    private bool startGame;
+
+    public bool StartGame { get => startGame; set => startGame = value; }
+
     private void Awake()
     {
         score = 10;
@@ -50,7 +54,7 @@ public class WarriorFase4 : MonoBehaviour
 
         if (difficulty == 1)
         {
-            speedMod = 0.0f;
+            speedMod = -0.1f;
             red = false;
             min = 1;
             max = 3;
@@ -69,89 +73,96 @@ public class WarriorFase4 : MonoBehaviour
             min = 3;
             max = 6;
         }
+        startGame = false;
     }
 
     void Update()
     {
-        if (gameObject.name == warriorName) //Humano 
+        if (startGame)
         {
-            horizontal = Input.GetAxis("Horizontal");
-            vertical = Input.GetAxis("Vertical");
-
-            Vector2 move = new Vector2(horizontal, vertical);
-
-            if (!Mathf.Approximately(move.x, 0.0f) || !Mathf.Approximately(move.y, 0.0f))
+            if (gameObject.name == warriorName) //Humano 
             {
-                lookDirection.Set(move.x, move.y);
-                lookDirection.Normalize();
-            }
+                horizontal = Input.GetAxis("Horizontal");
+                vertical = Input.GetAxis("Vertical");
 
-            animator.SetFloat("Move X", lookDirection.x);
-            animator.SetFloat("Move Y", lookDirection.y);
-            animator.SetFloat("Speed", move.magnitude);
+                Vector2 move = new Vector2(horizontal, vertical);
 
-            if (Input.GetKeyDown(KeyCode.C))
-            {
-                GameManager.Instance.playHitSong();
-                animator.SetTrigger("Attack01");
+                if (!Mathf.Approximately(move.x, 0.0f) || !Mathf.Approximately(move.y, 0.0f))
+                {
+                    lookDirection.Set(move.x, move.y);
+                    lookDirection.Normalize();
+                }
+
+                animator.SetFloat("Move X", lookDirection.x);
+                animator.SetFloat("Move Y", lookDirection.y);
+                animator.SetFloat("Speed", move.magnitude);
+
+                if (Input.GetKeyDown(KeyCode.C))
+                {
+                    GameManager.Instance.playHitSong();
+                    animator.SetTrigger("Attack01");
+                }
             }
         }
     }
 
     void FixedUpdate()
     {
-        Skeletons = GameObject.FindGameObjectsWithTag("Skeleton");
-
-        if (gameObject.name == warriorName && countdownRival == 0) //Humano 
+        if (startGame)
         {
-            Vector2 position = rigidbody2d.position;
-            position.x = position.x + speed * horizontal * Time.deltaTime;
-            position.y = position.y + speed * vertical * Time.deltaTime;
+            Skeletons = GameObject.FindGameObjectsWithTag("Skeleton");
 
-            rigidbody2d.MovePosition(position);
-        }
-        else //Máquina
-        {
-            Collider2D[] colliders = Physics2D.OverlapCircleAll(gameObject.transform.position, 1.0f, LayerMask.GetMask("Player"));
-
-            if (colliders.Length > 0 && countdownRival == 0)
+            if (gameObject.name == warriorName && countdownRival == 0) //Humano 
             {
+                Vector2 position = rigidbody2d.position;
+                position.x = position.x + speed * horizontal * Time.deltaTime;
+                position.y = position.y + speed * vertical * Time.deltaTime;
 
-                foreach (Collider2D collider in colliders)
+                rigidbody2d.MovePosition(position);
+            }
+            else //Máquina
+            {
+                Collider2D[] colliders = Physics2D.OverlapCircleAll(gameObject.transform.position, 1.0f, LayerMask.GetMask("Player"));
+
+                if (colliders.Length > 0 && countdownRival == 0)
                 {
-                    if (collider.name != gameObject.name)
+
+                    foreach (Collider2D collider in colliders)
                     {
-                        animator.SetTrigger("Attack01");
-                        lookDirection = (collider.transform.position - transform.position).normalized;
-                        move(lookDirection);
-                        countdownRival = 0.2f;
+                        if (collider.name != gameObject.name)
+                        {
+                            animator.SetTrigger("Attack01");
+                            lookDirection = (collider.transform.position - transform.position).normalized;
+                            move(lookDirection);
+                            countdownRival = 0.2f;
+                        }
                     }
                 }
-            }
-            
-            if (countdownRival == 0)
-            {
-                skeleton = GameObject.Find("SkeletonR");
-                if (red && skeleton != null)
+
+                if (countdownRival == 0)
                 {
-                    lookDirection = (skeleton.transform.position - transform.position).normalized;
-                    move(lookDirection);
-                }
-                else
-                {
-                    skeleton = GetClosestSkeleton(Skeletons);//pega o skeleto mais próximo para atacar 
-                    if (skeleton != null)
+                    skeleton = GameObject.Find("SkeletonR");
+                    if (red && skeleton != null)
                     {
-                        animator.SetTrigger("Attack01");
                         lookDirection = (skeleton.transform.position - transform.position).normalized;
                         move(lookDirection);
-
                     }
+                    else
+                    {
+                        skeleton = GetClosestSkeleton(Skeletons);//pega o skeleto mais próximo para atacar 
+                        if (skeleton != null)
+                        {
+                            animator.SetTrigger("Attack01");
+                            lookDirection = (skeleton.transform.position - transform.position).normalized;
+                            move(lookDirection);
+
+                        }
+                    }
+                    countdownRival = 0.2f;
                 }
-                countdownRival = 0.2f;
             }
+            countdownRival = Mathf.Clamp(countdownRival - Time.fixedDeltaTime, 0, Mathf.Infinity);
         }
-        countdownRival = Mathf.Clamp(countdownRival - Time.fixedDeltaTime, 0, Mathf.Infinity);
     }
 
     private void move(Vector2 lookDirection)

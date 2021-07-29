@@ -6,6 +6,8 @@ using UnityEngine.SceneManagement;
 
 public class Fase4 : MonoBehaviour
 {
+    public GameObject tutorial;
+    GameObject Skeletons;
     private GameObject[] Warriors;
     private List<GameObject> PrefabWarriors = new List<GameObject>();
     private GameObject tempWarrior;
@@ -24,6 +26,7 @@ public class Fase4 : MonoBehaviour
 
     void Start()
     {
+        Skeletons = GameObject.Find("Skeletons");
         startingPositions = GameManager.Instance.getPositions();
         Warriors = GameManager.Instance.getWarriors();
 
@@ -47,10 +50,22 @@ public class Fase4 : MonoBehaviour
         defeat = GameObject.Find("Defeat");
         if (GameManager.Instance.Defeat == false)
             defeat.SetActive(false);
+
     }
 
     void Update()
     {
+        if ((GameManager.Instance.Defeat || Input.GetKeyDown(KeyCode.C)) && verify)
+        {
+            tutorial.SetActive(false);
+
+            foreach (GameObject warrior in PrefabWarriors)
+                if (warrior != null)
+                    warrior.GetComponent<WarriorFase4>().StartGame = true;
+
+            Skeletons.GetComponent<CreatingSkeletons>().CreateSkeleton = true;
+        }
+
         timer.text = "Tempo Restante: " + Mathf.CeilToInt(timerValue) + " segundos";
         timerValue = Mathf.Clamp(timerValue - Time.deltaTime, 0, Mathf.Infinity);
 
@@ -68,7 +83,6 @@ public class Fase4 : MonoBehaviour
             loserName = lostWarrior.name;
             GameManager.Instance.desactivateWarrior(lostWarrior);
 
-            GameObject Skeletons = GameObject.Find("Skeletons");
             Skeletons.GetComponent<CreatingSkeletons>().CreateSkeleton = false;
 
             if (loserName == GameManager.Instance.WarriorName)

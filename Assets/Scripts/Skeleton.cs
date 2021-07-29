@@ -37,7 +37,7 @@ public class Skeleton : MonoBehaviour
         speed = 3.0f;
         velMod = 0.0f;
         cooldownTime = 0.0f;
-        attack = true;
+        attack = false;
 
         if (difficulty == 1)
         {

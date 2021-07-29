@@ -6,6 +6,8 @@ using UnityEngine.SceneManagement;
 
 public class Fase2 : MonoBehaviour
 {
+    public GameObject tutorial;
+    GameObject[] Skeletons;
     private GameObject[] Warriors;
     private List<GameObject> PrefabWarriors = new List<GameObject>();
     private GameObject tempWarrior;
@@ -14,13 +16,14 @@ public class Fase2 : MonoBehaviour
     private bool verify = true;
     private TMP_Text loserText;
     private TMP_Text helthText;
-    private float countdown = 1.0f;
+    private float countdown = 10.0f;
     private string loserName;
     bool end = false;//vai impedir que dois guerreiros sejam eliminados na rodada
     private GameObject defeat;
 
     void Start()
     {
+        Skeletons = GameObject.FindGameObjectsWithTag("Skeleton");
         startingPositions = GameManager.Instance.getPositions();
         Warriors = GameManager.Instance.getWarriors();
 
@@ -46,6 +49,17 @@ public class Fase2 : MonoBehaviour
 
     void Update()
     {
+        if ((GameManager.Instance.Defeat || Input.GetKeyDown(KeyCode.C)) && verify)
+        {
+            tutorial.SetActive(false);
+
+            foreach (GameObject warrior in PrefabWarriors)
+                if(warrior != null)
+                    warrior.GetComponent<WarriorFase2>().StartGame = true;
+  
+            foreach (GameObject skeleton in Skeletons)
+                skeleton.GetComponent<Skeleton>().setAttack(true);
+        }
 
         foreach (GameObject warrior in PrefabWarriors)
         {

@@ -14,6 +14,10 @@ public class CreatingSlimes : MonoBehaviour
     {
         occupiedPositions = new List<Vector2>//posições do mapa já ocupadas por algum objeto
         {
+            new Vector2(-1.5f, 0.5f),
+            new Vector2(-0.5f, -1.5f),
+            new Vector2(-1.5f, -1.5f),
+            new Vector2(-0.5f, 0.5f),
             new Vector2(-1f, -0.5f)
         };
 

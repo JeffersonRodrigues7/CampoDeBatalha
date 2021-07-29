@@ -86,7 +86,6 @@ public class GameManager : MonoBehaviour
 
     public void desactivateWarrior(GameObject warrior)
     {
-        Debug.Log(warrior.name);
         for (int i = 0; i < WarriorsTemp.Count; i++)
         {
             if (WarriorsTemp[i].name == warrior.name)

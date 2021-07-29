@@ -25,7 +25,7 @@ public class CreatingSkeletons : MonoBehaviour
         countdownSW = 0.0f;
         countdownSR = 5.0f;
         countdownSC = 10.0f;
-        createSkeleton = true;
+        createSkeleton = false;
     }
 
     void Update()

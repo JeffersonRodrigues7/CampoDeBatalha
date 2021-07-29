@@ -31,6 +31,9 @@ public class WarriorFase1 : MonoBehaviour
 
     private string warriorName;
     private int difficulty;
+    private bool startGame;
+
+    public bool StartGame { get => startGame; set => startGame = value; }
 
     void Start()
     {
@@ -45,6 +48,7 @@ public class WarriorFase1 : MonoBehaviour
         cooldownTime = 0.0f;
         Slimes = null;
         slime = null;
+        startGame = false;
 
         if (difficulty == 1)
         {
@@ -65,88 +69,98 @@ public class WarriorFase1 : MonoBehaviour
 
     void Update()
     {
-        if (gameObject.name == warriorName) //Humano 
+        if (startGame)
         {
-            horizontal = Input.GetAxis("Horizontal");
-            vertical = Input.GetAxis("Vertical");
-
-            Vector2 move = new Vector2(horizontal, vertical);
-
-            if (!Mathf.Approximately(move.x, 0.0f) || !Mathf.Approximately(move.y, 0.0f))
+            if (gameObject.name == warriorName) //Humano 
             {
-                lookDirection.Set(move.x, move.y);
-                lookDirection.Normalize();
-            }
+                horizontal = Input.GetAxis("Horizontal");
+                vertical = Input.GetAxis("Vertical");
 
-            animator.SetFloat("Move X", lookDirection.x);
-            animator.SetFloat("Move Y", lookDirection.y);
-            animator.SetFloat("Speed", move.magnitude);
+                Vector2 move = new Vector2(horizontal, vertical);
 
-            if (Input.GetKeyDown(KeyCode.C))
-            {
-                GameManager.Instance.playHitSong();
-                animator.SetTrigger("Attack01");
+                if (!Mathf.Approximately(move.x, 0.0f) || !Mathf.Approximately(move.y, 0.0f))
+                {
+                    lookDirection.Set(move.x, move.y);
+                    lookDirection.Normalize();
+                }
+
+                animator.SetFloat("Move X", lookDirection.x);
+                animator.SetFloat("Move Y", lookDirection.y);
+                animator.SetFloat("Speed", move.magnitude);
+
+                if (Input.GetKeyDown(KeyCode.C))
+                {
+                    GameManager.Instance.playHitSong();
+                    animator.SetTrigger("Attack01");
+                }
             }
         }
+
+
     }
 
 
     void FixedUpdate()
     {
-
-        if (gameObject.name == warriorName) //Humano 
+        if (startGame)
         {
-            Vector2 position = rigidbody2d.position;
-            position.x = position.x + speed * horizontal * Time.deltaTime;
-            position.y = position.y + speed * vertical * Time.deltaTime;
-
-            rigidbody2d.MovePosition(position);
-        }
-
-        else //Máquina
-        {
-            Slimes = GameObject.FindGameObjectsWithTag("Slime");
-
-            if (Slimes.Length == 0)
+            if (gameObject.name == warriorName) //Humano 
             {
-                slime = null;
-                rigidbody2d.velocity = new Vector2(0, 0);
-                animator.SetFloat("Move X", lookDirection.x);
-                animator.SetFloat("Move Y", lookDirection.y);
-                animator.SetFloat("Speed", 0f);
-            }
-               
-            else if (cooldownTime == 0 && Slimes.Length < qtdNeigh)
-                slime = GetClosestSlime(Slimes, Slimes.Length);
-            else if (cooldownTime == 0)
-                slime = GetClosestSlime(Slimes, qtdNeigh);
+                Vector2 position = rigidbody2d.position;
+                position.x = position.x + speed * horizontal * Time.deltaTime;
+                position.y = position.y + speed * vertical * Time.deltaTime;
 
-            if (slime != null)//Se atigiu algo
-            {
-                lookDirection = (slime.transform.position - transform.position).normalized;
-                animator.SetFloat("Move X", lookDirection.x);
-                animator.SetFloat("Move Y", lookDirection.y);
-                animator.SetFloat("Speed", lookDirection.magnitude);
-
-                rigidbody2d.velocity = new Vector2(lookDirection.x * (speed+speedMod), lookDirection.y * (speed + speedMod));
-                cooldownTime = 0.25f;
+                rigidbody2d.MovePosition(position);
             }
 
-            cooldownTime = Mathf.Clamp(cooldownTime - Time.fixedDeltaTime, 0, Mathf.Infinity);
+            else //Máquina
+            {
+                Slimes = GameObject.FindGameObjectsWithTag("Slime");
+
+                if (Slimes.Length == 0)
+                {
+                    slime = null;
+                    rigidbody2d.velocity = new Vector2(0, 0);
+                    animator.SetFloat("Move X", lookDirection.x);
+                    animator.SetFloat("Move Y", lookDirection.y);
+                    animator.SetFloat("Speed", 0f);
+                }
+
+                else if (cooldownTime == 0 && Slimes.Length < qtdNeigh)
+                    slime = GetClosestSlime(Slimes, Slimes.Length);
+                else if (cooldownTime == 0)
+                    slime = GetClosestSlime(Slimes, qtdNeigh);
+
+                if (slime != null)//Se atigiu algo
+                {
+                    lookDirection = (slime.transform.position - transform.position).normalized;
+                    animator.SetFloat("Move X", lookDirection.x);
+                    animator.SetFloat("Move Y", lookDirection.y);
+                    animator.SetFloat("Speed", lookDirection.magnitude);
+
+                    rigidbody2d.velocity = new Vector2(lookDirection.x * (speed + speedMod), lookDirection.y * (speed + speedMod));
+                    cooldownTime = 0.25f;
+                }
+
+                cooldownTime = Mathf.Clamp(cooldownTime - Time.fixedDeltaTime, 0, Mathf.Infinity);
+            }
         }
     }
 
     void OnCollisionStay2D(Collision2D other)
     {
-        if (other.gameObject.tag == "Slime")
+        if (startGame)
         {
-            if (gameObject.name != warriorName) animator.SetTrigger("Attack01");
-
-            if (hit)
+            if (other.gameObject.tag == "Slime")
             {
-                score++;
-                scoreText.text = gameObject.name + ": " + score;
-                Destroy(other.gameObject);
+                if (gameObject.name != warriorName) animator.SetTrigger("Attack01");
+
+                if (hit)
+                {
+                    score++;
+                    scoreText.text = gameObject.name + ": " + score;
+                    Destroy(other.gameObject);
+                }
             }
         }
     }

@@ -36,6 +36,10 @@ public class WarriorFase3 : MonoBehaviour
     private int difficulty;
     private float speedMod;
 
+    private bool startGame;
+
+    public bool StartGame { get => startGame; set => startGame = value; }
+
     private void Awake()
     {
         health = 10;
@@ -71,74 +75,81 @@ public class WarriorFase3 : MonoBehaviour
             speedMod = 1.5f;
             radius = 1.5f;
         }
+        startGame = false;
     }
 
     void Update()
     {
-        float px = transform.position.x;
-        float py = transform.position.y;
-
-        if (gameObject.name == warriorName) //Humano 
+        if (startGame)
         {
-            horizontal = Input.GetAxis("Horizontal");
-            vertical = Input.GetAxis("Vertical");
+            float px = transform.position.x;
+            float py = transform.position.y;
 
-            Vector2 move = new Vector2(horizontal, vertical);
-
-            if (!Mathf.Approximately(move.x, 0.0f) || !Mathf.Approximately(move.y, 0.0f))
+            if (gameObject.name == warriorName) //Humano 
             {
-                lookDirection.Set(move.x, move.y);
-                lookDirection.Normalize();
-            }
+                horizontal = Input.GetAxis("Horizontal");
+                vertical = Input.GetAxis("Vertical");
 
-            animator.SetFloat("Move X", lookDirection.x);
-            animator.SetFloat("Move Y", lookDirection.y);
-            animator.SetFloat("Speed", move.magnitude);
+                Vector2 move = new Vector2(horizontal, vertical);
 
-            if (Input.GetKeyDown(KeyCode.C))
-            {
-                GameManager.Instance.playHitSong();
-                animator.SetTrigger("Attack01");
+                if (!Mathf.Approximately(move.x, 0.0f) || !Mathf.Approximately(move.y, 0.0f))
+                {
+                    lookDirection.Set(move.x, move.y);
+                    lookDirection.Normalize();
+                }
+
+                animator.SetFloat("Move X", lookDirection.x);
+                animator.SetFloat("Move Y", lookDirection.y);
+                animator.SetFloat("Speed", move.magnitude);
+
+                if (Input.GetKeyDown(KeyCode.C))
+                {
+                    GameManager.Instance.playHitSong();
+                    animator.SetTrigger("Attack01");
+                }
             }
         }
     }
 
     private void FixedUpdate()
     {
-        float px = transform.position.x;
-        float py = transform.position.y;
-
-        if (gameObject.name == warriorName) //Humano 
+        if (startGame)
         {
-            Vector2 position = rigidbody2d.position;
-            position.x = position.x + speed * horizontal * Time.deltaTime;
-            position.y = position.y + speed * vertical * Time.deltaTime;
+            float px = transform.position.x;
+            float py = transform.position.y;
 
-            rigidbody2d.MovePosition(position);
-        }
-
-        else if(cooldownTime == 0)//Máquina
-        {
-            Collider2D[] colliders = Physics2D.OverlapCircleAll(gameObject.transform.position, radius, LayerMask.GetMask("Rock"));
-
-            if (colliders.Length > 0)
+            if (gameObject.name == warriorName) //Humano 
             {
-                foreach (Collider2D collider in colliders)
-                    verifyPosition(collider.gameObject);
+                Vector2 position = rigidbody2d.position;
+                position.x = position.x + speed * horizontal * Time.deltaTime;
+                position.y = position.y + speed * vertical * Time.deltaTime;
+
+                rigidbody2d.MovePosition(position);
             }
 
-            else
+            else if (cooldownTime == 0)//Máquina
             {
-                rigidbody2d.velocity = new Vector2(0, 0);
-                animator.SetFloat("Move X", lookDirection.x);
-                animator.SetFloat("Move Y", lookDirection.y);
-                animator.SetFloat("Speed", 0f);
+                Collider2D[] colliders = Physics2D.OverlapCircleAll(gameObject.transform.position, radius, LayerMask.GetMask("Rock"));
+
+                if (colliders.Length > 0)
+                {
+                    foreach (Collider2D collider in colliders)
+                        verifyPosition(collider.gameObject);
+                }
+
+                else
+                {
+                    rigidbody2d.velocity = new Vector2(0, 0);
+                    animator.SetFloat("Move X", lookDirection.x);
+                    animator.SetFloat("Move Y", lookDirection.y);
+                    animator.SetFloat("Speed", 0f);
+                }
+
+                cooldownTime = 0.1f;
             }
 
-            cooldownTime = 0.1f;
+            cooldownTime = Mathf.Clamp(cooldownTime - Time.fixedDeltaTime, 0, Mathf.Infinity);
         }
-
-        cooldownTime = Mathf.Clamp(cooldownTime - Time.fixedDeltaTime, 0, Mathf.Infinity);
     }
 
     private void verifyPosition(GameObject rock)//Método que vai fazer o Player desviar das pedras

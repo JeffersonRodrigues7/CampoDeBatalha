@@ -22,6 +22,7 @@ public class WarriorFase2 : MonoBehaviour
     float invincibleTimer;
     Color startColor;
 
+    private GameObject[] Warriors;
     private GameObject[] Skeletons;
     private GameObject skeleton;
     float cooldownTime;
@@ -29,6 +30,10 @@ public class WarriorFase2 : MonoBehaviour
     private string warriorName;
     private int difficulty;
     private float speedMod;
+
+    private bool startGame;
+
+    public bool StartGame { get => startGame; set => startGame = value; }
 
     private void Awake()
     {
@@ -46,6 +51,7 @@ public class WarriorFase2 : MonoBehaviour
         startColor = GetComponent<SpriteRenderer>().color;
         cooldownTime = 0.0f;
         healthText.text = gameObject.name + ": " + health;
+        Warriors = GameObject.FindGameObjectsWithTag("Player");
 
         if (difficulty == 1)
         {
@@ -59,31 +65,35 @@ public class WarriorFase2 : MonoBehaviour
         {
             speedMod = 0.5f;
         }
+        startGame = false;
     }
 
     void Update()
     {
-        if (gameObject.name == warriorName) //Humano 
+        if (startGame)
         {
-            horizontal = Input.GetAxis("Horizontal");
-            vertical = Input.GetAxis("Vertical");
-
-            Vector2 move = new Vector2(horizontal, vertical);
-
-            if (!Mathf.Approximately(move.x, 0.0f) || !Mathf.Approximately(move.y, 0.0f))
+            if (gameObject.name == warriorName) //Humano 
             {
-                lookDirection.Set(move.x, move.y);
-                lookDirection.Normalize();
-            }
+                horizontal = Input.GetAxis("Horizontal");
+                vertical = Input.GetAxis("Vertical");
 
-            animator.SetFloat("Move X", lookDirection.x);
-            animator.SetFloat("Move Y", lookDirection.y);
-            animator.SetFloat("Speed", move.magnitude);
+                Vector2 move = new Vector2(horizontal, vertical);
 
-            if (Input.GetKeyDown(KeyCode.C))
-            {
-                GameManager.Instance.playHitSong();
-                animator.SetTrigger("Attack01");
+                if (!Mathf.Approximately(move.x, 0.0f) || !Mathf.Approximately(move.y, 0.0f))
+                {
+                    lookDirection.Set(move.x, move.y);
+                    lookDirection.Normalize();
+                }
+
+                animator.SetFloat("Move X", lookDirection.x);
+                animator.SetFloat("Move Y", lookDirection.y);
+                animator.SetFloat("Speed", move.magnitude);
+
+                if (Input.GetKeyDown(KeyCode.C))
+                {
+                    GameManager.Instance.playHitSong();
+                    animator.SetTrigger("Attack01");
+                }
             }
         }
     }
@@ -91,39 +101,42 @@ public class WarriorFase2 : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (isInvincible)
+        if (startGame)
         {
-            GetComponent<SpriteRenderer>().color = new Color(Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f), 1.0f);
-
-            invincibleTimer -= Time.deltaTime;
-            if (invincibleTimer < 0)
+            if (isInvincible)
             {
-                GetComponent<SpriteRenderer>().color = startColor;
-                Collision(false, false, 3.0f);
+                GetComponent<SpriteRenderer>().color = new Color(Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f), 1.0f);
+
+                invincibleTimer -= Time.deltaTime;
+                if (invincibleTimer < 0)
+                {
+                    GetComponent<SpriteRenderer>().color = startColor;
+                    Collision(false, false, 3.0f);
+                }
             }
-        }
 
-        if (gameObject.name == warriorName) //Humano 
-        {
-            Vector2 position = rigidbody2d.position;
-            position.x = position.x + speed * horizontal * Time.deltaTime;
-            position.y = position.y + speed * vertical * Time.deltaTime;
-
-            rigidbody2d.MovePosition(position);
-        }
-        else //Máquina
-        {
-
-            Skeletons = GameObject.FindGameObjectsWithTag("Skeleton");
-            if (cooldownTime == 0)
+            if (gameObject.name == warriorName) //Humano 
             {
-                skeleton = GetClosestSkeleton(Skeletons);//pega o skeleto mais próximo pra fugir dele 
-                runAway(skeleton);
-                cooldownTime = 1.25f;
+                Vector2 position = rigidbody2d.position;
+                position.x = position.x + speed * horizontal * Time.deltaTime;
+                position.y = position.y + speed * vertical * Time.deltaTime;
+
+                rigidbody2d.MovePosition(position);
             }
-            
+            else //Máquina
+            {
+
+                Skeletons = GameObject.FindGameObjectsWithTag("Skeleton");
+                if (cooldownTime == 0)
+                {
+                    skeleton = GetClosestSkeleton(Skeletons);//pega o skeleto mais próximo pra fugir dele 
+                    runAway(skeleton);
+                    cooldownTime = 1.25f;
+                }
+
+            }
+            cooldownTime = Mathf.Clamp(cooldownTime - Time.fixedDeltaTime, 0, Mathf.Infinity);
         }
-        cooldownTime = Mathf.Clamp(cooldownTime - Time.fixedDeltaTime, 0, Mathf.Infinity);
     }
 
     private void runAway(GameObject skeleton)
@@ -207,9 +220,13 @@ public class WarriorFase2 : MonoBehaviour
         speed = speedOption;
 
         Skeletons = GameObject.FindGameObjectsWithTag("Skeleton");
+
         foreach (GameObject skeleton in Skeletons)
-            Physics2D.IgnoreCollision(gameObject.GetComponent<Collider2D>(), 
-                skeleton.GetComponent<Collider2D>(), option);
+            Physics2D.IgnoreCollision(gameObject.GetComponent<Collider2D>(), skeleton.GetComponent<Collider2D>(), option);
+
+        foreach (GameObject warrior in Warriors)
+            if(warrior != null && warrior.name != gameObject.name)
+                Physics2D.IgnoreCollision(gameObject.GetComponent<Collider2D>(), warrior.GetComponent<Collider2D>(), option);
     }
 
     public void setHelthText(TMP_Text text)

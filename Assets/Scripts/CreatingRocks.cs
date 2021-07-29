@@ -29,7 +29,7 @@ public class CreatingRocks : MonoBehaviour
         lookDirection = new Vector2(1, 0);       
         cooldownTime = 0.0f;
         speedMod = 0.0f;
-        launch = true;
+        launch = false;
 
         if (difficulty == 1)
         {

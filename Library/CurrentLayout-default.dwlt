@@ -426,9 +426,9 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: 8a140000
+      m_SelectedIDs: 2e4b0000
       m_LastClickedID: 0
-      m_ExpandedIDs: 3efbffff
+      m_ExpandedIDs: 2a6efeff526efeffa670feff5273fefffa75feff4078feff4a7bfeffc47dfeffa480feff5c83feff4e86feff1e89feffc891feff6295fefff298feff289dfefff2bafeffc6bbfefff0bdfeff3efbffff7e420000824200009c1b0100e2200100be250100a22b010056300100f6340100643b010048400100d6470100b44b010078500100d453010014590100f25c0100b8610100
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -834,13 +834,13 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/Scripts
+    - Assets/Scenes
     m_Globs: []
     m_OriginalText: 
   m_ViewMode: 1
   m_StartGridSize: 64
   m_LastFolders:
-  - Assets/Scripts
+  - Assets/Scenes
   m_LastFoldersGridSize: -1
   m_LastProjectPath: D:\Desktop\UFABC\Quad atual\Introducao a Programacao de Jogos
     - IPJ\Projeto\CampoDeBatalha
@@ -848,8 +848,8 @@ MonoBehaviour:
     m_IsLocked: 0
   m_FolderTreeState:
     scrollPos: {x: 0, y: 30}
-    m_SelectedIDs: de450000
-    m_LastClickedID: 17886
+    m_SelectedIDs: dc450000
+    m_LastClickedID: 17884
     m_ExpandedIDs: 00000000b0450000b2450000b4450000b6450000b8450000ba450000bc450000be450000c0450000c2450000c4450000c6450000c8450000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
@@ -906,7 +906,7 @@ MonoBehaviour:
     m_SelectedInstanceIDs: 
     m_LastClickedInstanceID: 0
     m_HadKeyboardFocusLastEvent: 1
-    m_ExpandedInstanceIDs: c62300008c510000605100003c40000064400000e83f00004040000052400000ae3f0000cc4e0000d24e0000d84e0000de4e0000dc4d0000e44d000090450000904f0000be4a0000ac500000364e0000384200008641000004420000d4420000a043000086440000b06d0000946d0000226d0000146d00005acbffff1e570000584300000000000014e8000092480000ca460000
+    m_ExpandedInstanceIDs: c62300008c510000605100003c40000064400000e83f00004040000052400000ae3f0000cc4e0000d24e0000d84e0000de4e0000dc4d0000e44d000090450000904f0000be4a0000ac500000364e0000384200008641000004420000d4420000a043000086440000b06d0000946d0000226d0000146d00005acbffff1e5700005843000014e8000092480000ca4600000000000038430000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 

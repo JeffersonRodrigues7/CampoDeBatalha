@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 
 public class Fase1 : MonoBehaviour
 {
+    public GameObject tutorial;
     private GameObject[] Slimes;
     private GameObject[] Warriors;
     private List<GameObject> PrefabWarriors = new List<GameObject>();
@@ -15,7 +16,7 @@ public class Fase1 : MonoBehaviour
     private bool verify = true;
     private TMP_Text loserText;
     private TMP_Text scoreText;
-    private float countdown = 1.0f;
+    private float countdown = 10.0f;
     private string loserName;
     private GameObject defeat;
 
@@ -47,6 +48,15 @@ public class Fase1 : MonoBehaviour
 
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            tutorial.SetActive(false);
+            foreach (GameObject warrior in PrefabWarriors)
+                if (warrior != null)
+                    warrior.GetComponent<WarriorFase1>().StartGame = true;
+        }
+
+            
         Slimes = GameObject.FindGameObjectsWithTag("Slime");
 
         if(Slimes.Length == 0 && verify)
