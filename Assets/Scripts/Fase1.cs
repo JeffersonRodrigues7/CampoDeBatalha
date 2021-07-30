@@ -19,6 +19,8 @@ public class Fase1 : MonoBehaviour
     private float countdown = 10.0f;
     private string loserName;
     private GameObject defeat;
+    private bool faderControl;
+    Fader fader;
 
     void Start()
     {
@@ -44,6 +46,8 @@ public class Fase1 : MonoBehaviour
         if (GameManager.Instance.Defeat == false) 
             defeat.SetActive(false);
         GameManager.Instance.playBattleSong();
+        fader = FindObjectOfType<Fader>();
+        faderControl = true;
     }
 
     void Update()
@@ -61,11 +65,9 @@ public class Fase1 : MonoBehaviour
 
         if(Slimes.Length == 0 && verify)
         { 
-            
             foreach (GameObject warrior in PrefabWarriors)
             {
-                if (lostWarrior.GetComponent<WarriorFase1>().getScore() > 
-                    warrior.GetComponent<WarriorFase1>().getScore())
+                if (lostWarrior.GetComponent<WarriorFase1>().getScore() >  warrior.GetComponent<WarriorFase1>().getScore())
                 {
                     lostWarrior = warrior;
                 }
@@ -77,16 +79,16 @@ public class Fase1 : MonoBehaviour
                 defeat.SetActive(true);
         }
 
-        if(countdown == 0)
+        if(countdown == 0 && faderControl)
         {
-            SceneManager.LoadScene("Fase 2");
+            faderControl = false;
+            fader.FadeToScene("Fase 2", 0.5f);
         }
 
         if (!verify)
         {
             countdown = Mathf.Clamp(countdown - Time.deltaTime, 0, Mathf.Infinity);
-            loserText.text = loserName + " foi o perdedor da rodada\nComeçando nova fase em " 
-                + Mathf.CeilToInt(countdown) + " segundos";
+            loserText.text = loserName + " foi o perdedor da rodada\nComeçando nova fase em " + Mathf.CeilToInt(countdown) + " segundos";
         }
     }
 

@@ -15,13 +15,15 @@ public class GameManager : MonoBehaviour
     private string warriorName;
     private int difficulty;
     private bool defeat;
+    Fader fader;
 
-    AudioSource defeatAS, battleAS, menuAS, hitAS, winAS;
+    AudioSource defeatAS, battleAS, menuAS, hitAS, winAS, endAS;
     public AudioClip defeatSound;
     public AudioClip winSound;
     public AudioClip battleSound;
     public AudioClip menuSound;
     public AudioClip hitSound;
+    public AudioClip endSound;
 
     public static GameManager Instance
     {
@@ -64,12 +66,14 @@ public class GameManager : MonoBehaviour
         battleAS = gameObject.AddComponent<AudioSource>();
         hitAS = gameObject.AddComponent<AudioSource>();
         winAS = gameObject.AddComponent<AudioSource>();
+        endAS = gameObject.AddComponent<AudioSource>();
 
         defeatAS.clip = defeatSound;
         menuAS.clip = menuSound;
         battleAS.clip = battleSound;
         hitAS.clip = hitSound;
         winAS.clip = winSound;
+        endAS.clip = endSound;
     }
 
     private void Start()
@@ -82,6 +86,7 @@ public class GameManager : MonoBehaviour
             WarriorsTemp[i].SetActive(true);
         }
         defeat = false;
+        fader = FindObjectOfType<Fader>();
     }
 
     public void desactivateWarrior(GameObject warrior)
@@ -125,10 +130,11 @@ public class GameManager : MonoBehaviour
     {
         battleAS.Stop();
         Start();
-        SceneManager.LoadScene("Menu");
+        fader.FadeToScene("Menu", 0.5f);
     }
 
     public void playMenuSong() {
+        endAS.Stop();
         menuAS.loop = true;
         menuAS.Play();
         menuAS.volume = 0.1f;
@@ -159,5 +165,11 @@ public class GameManager : MonoBehaviour
         hitAS.Play();
     }
 
-
+    public void playEndSong()
+    {
+        battleAS.Stop();
+        endAS.loop = true;
+        endAS.Play();
+        endAS.volume = 0.1f;
+    }
 }

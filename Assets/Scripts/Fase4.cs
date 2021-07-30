@@ -20,9 +20,10 @@ public class Fase4 : MonoBehaviour
     private float countdown = 10.0f;
     private string loserName;
     private GameObject defeat;
-
     public TMP_Text timer;
     private float timerValue = 60.0f;
+    private bool faderControl;
+    Fader fader;
 
     void Start()
     {
@@ -51,6 +52,8 @@ public class Fase4 : MonoBehaviour
         if (GameManager.Instance.Defeat == false)
             defeat.SetActive(false);
 
+        fader = FindObjectOfType<Fader>();
+        faderControl = true;
     }
 
     void Update()
@@ -92,15 +95,17 @@ public class Fase4 : MonoBehaviour
 
         }
 
-        if (countdown == 0)
+        if (countdown == 0 && faderControl)
         {
-            GameManager.Instance.startAgainManager();
+            faderControl = false;
+            fader.FadeToScene("Fim", 0.5f);
         }
 
         if (!verify)
         {
             countdown = Mathf.Clamp(countdown - Time.deltaTime, 0, Mathf.Infinity);
-            loserText.text = loserName + " foi o perdedor da rodada\nComeçando nova fase em " + Mathf.CeilToInt(countdown) + " segundos";
+            if(winner.name == GameManager.Instance.WarriorName) loserText.text = "PARABÉNS!!! Você conseguiu vencer o torneio!\nO Rei falará com você em " + Mathf.CeilToInt(countdown) + " segundos";
+            else loserText.text = winner.name + " foi o vencedor\nO Rei falará com o ganhador em " + Mathf.CeilToInt(countdown) + " segundos";
         }
     }
 

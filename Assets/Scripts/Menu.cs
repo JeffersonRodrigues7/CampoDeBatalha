@@ -13,6 +13,7 @@ public class Menu : MonoBehaviour
     public TMP_Text startText;
     private float countdown;
     private bool start;
+    Fader fader;
 
 
     void Start()
@@ -21,16 +22,18 @@ public class Menu : MonoBehaviour
         difficultyChoice = GameObject.Find("EscolherDificuldade");
         credits = GameObject.Find("Creditos");
         difficultyChoice.SetActive(false);
-        countdown = 1.0f;
+        countdown = 5.0f;
         start = false;
         GameManager.Instance.playMenuSong();
+        fader = FindObjectOfType<Fader>();
     }
 
     void Update()
     {
-        if (countdown == 0)
+        if (countdown == 0 && start)
         {
-            SceneManager.LoadScene("Fase 1");
+            start = false;
+            fader.FadeToScene("Fase 1", 0.5f);
         }
 
         if (start)
@@ -55,5 +58,5 @@ public class Menu : MonoBehaviour
         start = true;
     }
 
-    public void openCredits() { SceneManager.LoadScene("Creditos"); }
+    public void openCredits() {  fader.FadeToScene("Creditos", 0.5f); }
 }

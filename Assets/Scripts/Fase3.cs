@@ -20,6 +20,8 @@ public class Fase3 : MonoBehaviour
     private string loserName;
     bool end = false;//vai impedir que dois guerreiros sejam eliminados na rodada
     private GameObject defeat;
+    private bool faderControl;
+    Fader fader;
 
     void Start()
     {
@@ -46,6 +48,9 @@ public class Fase3 : MonoBehaviour
         defeat = GameObject.Find("Defeat");
         if (GameManager.Instance.Defeat == false)
             defeat.SetActive(false);
+
+        fader = FindObjectOfType<Fader>();
+        faderControl = true;
     }
 
     void Update()
@@ -79,9 +84,10 @@ public class Fase3 : MonoBehaviour
             }
         }
 
-        if (countdown == 0)
+        if (countdown == 0 && faderControl)
         {
-            SceneManager.LoadScene("Fase 4");
+            faderControl = false;
+            fader.FadeToScene("Fase 4", 0.5f);
         }
 
         if (!verify)
