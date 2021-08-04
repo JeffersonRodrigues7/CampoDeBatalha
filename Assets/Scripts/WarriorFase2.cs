@@ -105,7 +105,8 @@ public class WarriorFase2 : MonoBehaviour
         {
             if (isInvincible)
             {
-                GetComponent<SpriteRenderer>().color = new Color(Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f), 1.0f);
+                GetComponent<SpriteRenderer>().color = new Color(Random.Range(0.0f, 1.0f), 
+                    Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f), 1.0f);
 
                 invincibleTimer -= Time.deltaTime;
                 if (invincibleTimer < 0)
@@ -176,7 +177,8 @@ public class WarriorFase2 : MonoBehaviour
         animator.SetFloat("Move Y", lookDirection.y);
         animator.SetFloat("Speed", lookDirection.magnitude);
 
-        rigidbody2d.velocity = new Vector2(lookDirection.x * (speed + speedMod), lookDirection.y * (speed + speedMod));
+        rigidbody2d.velocity = new Vector2(lookDirection.x * (speed + speedMod), 
+            lookDirection.y * (speed + speedMod));
 
     }
 
@@ -210,11 +212,12 @@ public class WarriorFase2 : MonoBehaviour
         health += k;
         healthText.text = gameObject.name + ": " + health;
 
-        //Quando o player for atingido ele terá um aumento na velocidade, não vai colidir mais com o esqueleto e começará a piscar
+        //Quando o player for atingido ele terá um aumento na velocidade,
+        //não vai colidir mais com o esqueleto e começará a piscar
         Collision(true, true, 5.0f);
     }
 
-    public void Collision(bool option, bool isInvincibleOption, float speedOption)//ativa e desativa colisão com esqueleto
+    public void Collision(bool option, bool isInvincibleOption, float speedOption)
     {
         isInvincible = isInvincibleOption;
         speed = speedOption;
@@ -222,11 +225,13 @@ public class WarriorFase2 : MonoBehaviour
         Skeletons = GameObject.FindGameObjectsWithTag("Skeleton");
 
         foreach (GameObject skeleton in Skeletons)
-            Physics2D.IgnoreCollision(gameObject.GetComponent<Collider2D>(), skeleton.GetComponent<Collider2D>(), option);
+            Physics2D.IgnoreCollision(gameObject.GetComponent<Collider2D>(), 
+                skeleton.GetComponent<Collider2D>(), option);
 
         foreach (GameObject warrior in Warriors)
             if(warrior != null && warrior.name != gameObject.name)
-                Physics2D.IgnoreCollision(gameObject.GetComponent<Collider2D>(), warrior.GetComponent<Collider2D>(), option);
+                Physics2D.IgnoreCollision(gameObject.GetComponent<Collider2D>(), 
+                    warrior.GetComponent<Collider2D>(), option);
     }
 
     public void setHelthText(TMP_Text text)

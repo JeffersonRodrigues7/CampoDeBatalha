@@ -41,6 +41,7 @@ public class CreatingSkeletons : MonoBehaviour
             if (skeletonsW < numSkeletonsW && countdownSW == 0)
             {
                 instanceSkeleton(skeletonW);
+                countdownSW = 1.0f;
             }
 
             if (countdownSR == 0)
@@ -94,6 +95,5 @@ public class CreatingSkeletons : MonoBehaviour
         occupiedPositions.Add(pos);
         GameObject obj = Instantiate<GameObject>(skeletonP, pos, Quaternion.identity, transform);
         obj.name = skeletonP.name;
-        countdownSW = 1.0f;
     }
 }

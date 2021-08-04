@@ -21,14 +21,16 @@ public class FaseFinal : MonoBehaviour
     {
         position = new Vector2(-0.78f, -3.43f);
         Warriors = GameManager.Instance.getWarriors();
-        winner = Instantiate<GameObject>(Warriors[0], position, Quaternion.identity, GameObject.Find("Warriors").transform);
+        winner = Instantiate<GameObject>(Warriors[0], position, Quaternion.identity, 
+            GameObject.Find("Warriors").transform);
         winner.name = Warriors[0].name;
         winner.AddComponent<WarriorFaseAward>();
         countdown = 10.0f;
         fader = FindObjectOfType<Fader>();
         faderControl = true;
         GameManager.Instance.playEndSong();
-        ballonText.text = "Renly: Parabéns " + winner.name + ", você foi o grande campeão do nosso torneio e agora faz parte da guarda real!";
+        ballonText.text = "Renly: Parabéns " + winner.name + ", você foi o grande " +
+            "campeão do nosso torneio e agora faz parte da guarda real!";
 
         defeat = GameObject.Find("Defeat");
         if (GameManager.Instance.Defeat == false)
@@ -48,7 +50,8 @@ public class FaseFinal : MonoBehaviour
             faderControl = false;
             fader.FadeToScene("Creditos", 10.0f);
         }
-        credits.text = "Indo para os creditos em: " + Mathf.CeilToInt(countdown) + " segundos";
+        credits.text = "Indo para os creditos em: " + Mathf.CeilToInt(countdown) 
+            + " segundos";
         countdown = Mathf.Clamp(countdown - Time.deltaTime, 0, Mathf.Infinity);
     }
 

@@ -11,7 +11,7 @@ public class Skeleton : MonoBehaviour
     Rigidbody2D rigidbody2d;
     bool hit;
     float cooldownTime;
-    bool attack;//Vai ser desablito no script Fase2
+    bool attack;//Vai ser desabilitado no script Fase2
 
     float horizontal;
     float vertical;

@@ -29,7 +29,8 @@ public class Fase1 : MonoBehaviour
 
         for (int i = 0; i < Warriors.Length; i++)
         {
-            tempWarrior = Instantiate<GameObject>(Warriors[i], startingPositions[i], Quaternion.identity, GameObject.Find("Warriors").transform);
+            tempWarrior = Instantiate<GameObject>(Warriors[i], startingPositions[i], 
+                Quaternion.identity, GameObject.Find("Warriors").transform);
             tempWarrior.name = Warriors[i].name;
             tempWarrior.AddComponent<WarriorFase1>();
             scoreText = GameObject.Find(Warriors[i].name + "T").GetComponent<TMP_Text>();

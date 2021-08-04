@@ -7174,9 +7174,9 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_text: "Nesta fase voc\xEA deve eliminar os esqueletos e atacar seu advers\xE1rio.\nEsqueletos
-    brancos valem 1 ponto, vermelhos 5 pontos e os brilhantes 15 pontos. Ao ser acertado
-    por um esqueleto branco voc\xEA perde 1 ponto e por um vermelho 5 pontos. Ao
-    acertar seu advers\xE1rio voc\xEA receber\xE1 um valor de pontos aleat\xF3rio
+    brancos valem 1 ponto, vermelhos 10 pontos e os brilhantes 15 pontos. Ao ser
+    acertado por um esqueleto branco voc\xEA perde 1 ponto e por um vermelho 5 pontos.
+    Ao acertar seu advers\xE1rio voc\xEA receber\xE1 um valor de pontos aleat\xF3rio
     entre 1 a 5 pontos. Vence o jogo quem ao final de 1 minuto obter a maior pontua\xE7\xE3o.\n\nAperte
     C para come\xE7ar."
   m_isRightToLeft: 0

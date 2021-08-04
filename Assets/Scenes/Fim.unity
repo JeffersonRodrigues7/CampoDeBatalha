@@ -7343,6 +7343,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ballonText: {fileID: 1042284250}
   credits: {fileID: 1573163387}
+  creditsObject: {fileID: 0}
 --- !u!1001 &1154528711
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8312,10 +8313,10 @@ RectTransform:
   m_Father: {fileID: 18289851}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 1, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -560, y: -350}
-  m_SizeDelta: {x: 1120, y: -700}
+  m_AnchorMin: {x: 0.5, y: 0}
+  m_AnchorMax: {x: 0.5, y: 0}
+  m_AnchoredPosition: {x: 0, y: 90}
+  m_SizeDelta: {x: 1120, y: 180}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1573163387
 MonoBehaviour:

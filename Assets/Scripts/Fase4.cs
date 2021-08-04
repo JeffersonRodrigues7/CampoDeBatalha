@@ -15,6 +15,7 @@ public class Fase4 : MonoBehaviour
     private GameObject winner;
     private Vector2[] startingPositions;
     private bool verify = true;
+    private bool start = false;
     private TMP_Text loserText;
     private TMP_Text helthText;
     private float countdown = 10.0f;
@@ -60,6 +61,7 @@ public class Fase4 : MonoBehaviour
     {
         if ((GameManager.Instance.Defeat || Input.GetKeyDown(KeyCode.C)) && verify)
         {
+            start = true;
             tutorial.SetActive(false);
 
             foreach (GameObject warrior in PrefabWarriors)
@@ -70,7 +72,11 @@ public class Fase4 : MonoBehaviour
         }
 
         timer.text = "Tempo Restante: " + Mathf.CeilToInt(timerValue) + " segundos";
-        timerValue = Mathf.Clamp(timerValue - Time.deltaTime, 0, Mathf.Infinity);
+        if (start)
+        {
+            timerValue = Mathf.Clamp(timerValue - Time.deltaTime, 0, Mathf.Infinity);
+        }
+
 
         if (timerValue == 0 && verify)
         {

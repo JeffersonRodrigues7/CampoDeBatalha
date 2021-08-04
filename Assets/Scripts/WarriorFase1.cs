@@ -131,14 +131,15 @@ public class WarriorFase1 : MonoBehaviour
                 else if (cooldownTime == 0)
                     slime = GetClosestSlime(Slimes, qtdNeigh);
 
-                if (slime != null)//Se atigiu algo
+                if (slime != null)
                 {
                     lookDirection = (slime.transform.position - transform.position).normalized;
                     animator.SetFloat("Move X", lookDirection.x);
                     animator.SetFloat("Move Y", lookDirection.y);
                     animator.SetFloat("Speed", lookDirection.magnitude);
 
-                    rigidbody2d.velocity = new Vector2(lookDirection.x * (speed + speedMod), lookDirection.y * (speed + speedMod));
+                    rigidbody2d.velocity = new Vector2(lookDirection.x * (speed + speedMod), 
+                        lookDirection.y * (speed + speedMod));
                     cooldownTime = 0.25f;
                 }
 
